@@ -1,0 +1,229 @@
+import re
+import os
+import json
+
+from PyQt4 import uic
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+
+
+
+(UI_cls, Parent_cls) = uic.loadUiType(
+    os.path.abspath(os.path.join(
+        os.path.dirname(__file__),
+        '..',
+        'ui/MainWindow.ui'
+    ))
+)
+
+
+
+class MainWindow(Parent_cls):
+    def __init__(self, parent = None, path = None):
+        assert path is not None
+
+        self.path = path
+
+        Parent_cls.__init__(self, parent)
+
+        self.ui = UI_cls()
+        self.ui.setupUi(self)
+
+        self.connect(
+            self.ui.tabWidget,
+            SIGNAL("currentChanged(int)"),
+            self.addTabEvent
+        )
+        self.connect(
+            self,
+            SIGNAL("saveData"),
+            self.save
+        )
+
+        self.initTabWidget()
+
+
+    def __del__(self):
+        self.ui = None
+
+
+    def event(self, e):
+        if e.type() == QEvent.KeyRelease:
+            self.emit(SIGNAL("saveData"))
+        return Parent_cls.event(self, e)
+
+
+    def initTabWidget(self):
+        dataPath = os.path.join(self.path, "data.json")
+
+        if os.path.exists(dataPath):
+            with open(dataPath, "rb") as f:
+                data = json.load(f)
+
+            for tab in data["tabs"]:
+                self.addTabEvent(
+                    title = tab['title'],
+                    text = tab['text'],
+                    loaded = True
+                )
+
+        if self.ui.tabWidget.count() == 1:
+            self.addTabEvent()
+
+
+    def save(self):
+        if not os.path.exists(self.path):
+            os.mkdir(self.path)
+
+        dataPath = os.path.join(self.path, "data.json")
+
+        data = {
+            "tabs": []
+        }
+
+        count = self.ui.tabWidget.count()
+        for i in xrange(count - 1):
+            title = unicode(self.ui.tabWidget.tabText(i))
+            text = unicode(self.ui.tabWidget.widget(i).children()[1].toPlainText())
+            data["tabs"].append({
+                'title': title,
+                'text': text
+            })
+
+        with open(dataPath, "wb") as f:
+            json.dump(data, f)
+
+
+    def addTabEvent(self, changedIndex = None, title = None, text = "", loaded = False):
+        # addTabIndex
+        addTabIndex = self.ui.tabWidget.currentIndex()
+        count = self.ui.tabWidget.count()
+
+        if title is not None or addTabIndex == count - 1:
+            # newTab
+            newTab = QWidget(self)
+
+            # layout
+            layout = QVBoxLayout()
+            layout.setMargin(0)
+            newTab.setLayout(layout)
+
+            # newTextEdit with geometry
+            newTextEdit = QTextEdit(newTab)
+            widgetGeometry = self.ui.tabWidget.geometry()
+            widgetGeometry.setTop(0)
+            widgetGeometry.setLeft(0)
+            newTextEdit.setGeometry(widgetGeometry)
+            newTextEdit.setText(text)
+            layout.addWidget(newTextEdit)
+
+            # new title
+            if title is None:
+                title = self.getNewUntitledTitle()
+
+            # adding, replacing and setting the current tab
+            newTabIndex = self.ui.tabWidget.addTab(newTab, title)
+            self.ui.tabWidget.tabBar().moveTab(count - 1, newTabIndex)
+            self.ui.tabWidget.setCurrentIndex(count - 1)
+
+            if loaded:
+                self.ui.tabWidget.setCurrentIndex(0)
+
+        # saving
+        if not loaded:
+            self.emit(SIGNAL("saveData"))
+
+
+    def contextMenuEvent(self, event):
+        tabIndex = self.getClickedTabIndex(event.pos())
+
+        if tabIndex is not None and tabIndex < self.ui.tabWidget.count() - 1:
+            menu = QMenu(self)
+
+            renameAction = menu.addAction("Rename")
+            removeAction = menu.addAction("Remove")
+
+            action = menu.exec_(self.mapToGlobal(event.pos()))
+
+            if action == renameAction:
+                self.renameTabSlot(tabIndex)
+
+            elif action == removeAction:
+                self.removeTabSlot(tabIndex)
+
+
+    def renameTabSlot(self, tabIndex):
+        oldTitle = self.ui.tabWidget.tabText(tabIndex)
+
+        newTitle, ok = QInputDialog.getText(
+            self,
+            u"Rename",
+            u"Enter a new title for the tab:",
+            text = oldTitle
+        )
+
+        if ok:
+            self.ui.tabWidget.setTabText(tabIndex, newTitle)
+            self.emit(SIGNAL("saveData"))
+
+
+    def removeTabSlot(self, tabIndex):
+        title = unicode(self.ui.tabWidget.tabText(tabIndex))
+
+        answer = QMessageBox.question(
+            self,
+            u"Remove",
+            u"Are you sure to remove '{0}'?".format(title),
+            QMessageBox.Yes,
+            QMessageBox.No
+        )
+
+        if answer == QMessageBox.Yes:
+            currentIndex = self.ui.tabWidget.currentIndex()
+
+            if tabIndex == currentIndex:
+                if tabIndex > 0:
+                    self.ui.tabWidget.setCurrentIndex(tabIndex - 1)
+                else:
+                    self.ui.tabWidget.setCurrentIndex(tabIndex + 1)
+
+            self.ui.tabWidget.removeTab(tabIndex)
+
+            if self.ui.tabWidget.count() == 1:
+                self.addTabEvent()
+
+            self.emit(SIGNAL("saveData"))
+
+
+    def getClickedTabIndex(self, pos):
+        tabBar = self.ui.tabWidget.tabBar()
+
+        globalPos = self.mapToGlobal(pos)
+        posInTabBar = tabBar.mapFromGlobal(globalPos)
+
+        count = self.ui.tabWidget.count()
+
+        for i in xrange(count):
+            if tabBar.tabRect(i).contains(posInTabBar):
+                return i
+
+        return None
+
+
+    def getNewUntitledTitle(self):
+        count = self.ui.tabWidget.count()
+
+        untitledNums = set()
+        for index in xrange(count):
+            text = self.ui.tabWidget.tabText(index)
+
+            untitledMatch = re.match(r'^Untitled( \((\d+)\))?$', text)
+            if untitledMatch is not None:
+                num = int(untitledMatch.group(2)) if untitledMatch.group(2) is not None else 1
+                untitledNums.add(num)
+
+        newNum = 1
+        while newNum in untitledNums:
+            newNum += 1
+
+        return "Untitled (%d)" % newNum if newNum != 1 else "Untitled"
