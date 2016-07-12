@@ -1,0 +1,4 @@
+- saving a tab into a file
+- moving tabs
+- pasting correctly
+- keeping the geometry if closed
