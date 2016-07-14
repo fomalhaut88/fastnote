@@ -48,7 +48,7 @@ class MainWindow(Parent_cls):
 
 
     def event(self, e):
-        if e.type() == QEvent.KeyRelease:
+        if e.type() in (QEvent.KeyRelease, QEvent.Resize):
             self.emit(SIGNAL("saveData"))
         return Parent_cls.event(self, e)
 
@@ -59,6 +59,16 @@ class MainWindow(Parent_cls):
         if os.path.exists(dataPath):
             with open(dataPath, "rb") as f:
                 data = json.load(f)
+
+            if "fullscreen" in data:
+                if data["fullscreen"]:
+                    self.showMaximized()
+
+                elif "geom" in data:
+                    geom = self.geometry()
+                    geom.setWidth(data["geom"]["width"])
+                    geom.setHeight(data["geom"]["height"])
+                    self.setGeometry(geom)
 
             for tab in data["tabs"]:
                 self.addTabEvent(
@@ -78,7 +88,12 @@ class MainWindow(Parent_cls):
         dataPath = os.path.join(self.path, "data.json")
 
         data = {
-            "tabs": []
+            "tabs": [],
+            "geom": {
+                "width": self.geometry().width(),
+                "height": self.geometry().height()
+            },
+            "fullscreen": self.isFullScreen()
         }
 
         count = self.ui.tabWidget.count()
@@ -141,12 +156,16 @@ class MainWindow(Parent_cls):
             menu = QMenu(self)
 
             renameAction = menu.addAction("Rename")
+            saveasAction = menu.addAction("Save as...")
             removeAction = menu.addAction("Remove")
 
             action = menu.exec_(self.mapToGlobal(event.pos()))
 
             if action == renameAction:
                 self.renameTabSlot(tabIndex)
+
+            elif action == saveasAction:
+                self.saveTabAction(tabIndex)
 
             elif action == removeAction:
                 self.removeTabSlot(tabIndex)
@@ -165,6 +184,22 @@ class MainWindow(Parent_cls):
         if ok:
             self.ui.tabWidget.setTabText(tabIndex, newTitle)
             self.emit(SIGNAL("saveData"))
+
+
+    def saveTabAction(self, tabIndex):
+        title = unicode(self.ui.tabWidget.tabText(tabIndex))
+
+        filePath = os.path.join(
+            os.path.expanduser('~'),
+            title + '.txt'
+        )
+
+        filePath = QFileDialog.getSaveFileName(self, 'Save', filePath)
+
+        if filePath:
+            text = unicode(self.ui.tabWidget.widget(tabIndex).children()[1].toPlainText())
+            with open(filePath, 'w') as f:
+                f.write(text.encode('utf8'))
 
 
     def removeTabSlot(self, tabIndex):
