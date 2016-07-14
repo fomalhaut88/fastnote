@@ -1,22 +1,52 @@
 missing module named PyQt4.QtCore.QCoreApplication - imported by PyQt4.QtCore, /usr/local/lib/python2.7/dist-packages/PyInstaller/loader/rthooks/pyi_rth_qt4plugins.py
-missing module named PySide.QCoreApplication - imported by PySide, /usr/local/lib/python2.7/dist-packages/PyInstaller/loader/rthooks/pyi_rth_qt4plugins.py
-missing module named PySide - imported by /usr/local/lib/python2.7/dist-packages/PyInstaller/loader/rthooks/pyi_rth_qt4plugins.py
-missing module named codecs.mbcs_encode - imported by codecs, encodings.mbcs
-missing module named codecs.mbcs_decode - imported by codecs, encodings.mbcs
-missing module named binascii.a2b_uu - imported by binascii, encodings.uu_codec
-missing module named binascii.b2a_uu - imported by binascii, encodings.uu_codec
-missing module named binascii.b2a_base64 - imported by binascii, email.base64mime
-missing module named binascii.a2b_base64 - imported by binascii, email.base64mime
-missing module named binascii.b2a_qp - imported by binascii, quopri
-missing module named binascii.a2b_qp - imported by binascii, quopri
-missing module named binascii.hexlify - imported by binascii, random
-missing module named unicodedata.ucd_3_2_0 - imported by unicodedata, stringprep, encodings.idna
-missing module named _sre.MAXREPEAT - imported by _sre, sre_constants
+missing module named PySide.QtCore.QCoreApplication - imported by PySide.QtCore, /usr/local/lib/python2.7/dist-packages/PyInstaller/loader/rthooks/pyi_rth_qt4plugins.py
+missing module named PySide.QtNetwork - imported by PySide
+missing module named _ctypes._wstring_at_addr - imported by _ctypes, ctypes
+missing module named _ctypes._string_at_addr - imported by _ctypes, ctypes
+missing module named _ctypes._cast_addr - imported by _ctypes, ctypes
+missing module named _ctypes._memset_addr - imported by _ctypes, ctypes
+missing module named _ctypes._memmove_addr - imported by _ctypes, ctypes
+missing module named _ctypes.get_last_error - imported by _ctypes, ctypes
+missing module named _ctypes.set_last_error - imported by _ctypes, ctypes
+missing module named _ctypes._check_HRESULT - imported by _ctypes, ctypes
+missing module named _ctypes.set_conversion_mode - imported by _ctypes, ctypes
+missing module named _ctypes._pointer_type_cache - imported by _ctypes, ctypes
+missing module named _ctypes.POINTER - imported by _ctypes, ctypes
+missing module named _ctypes.pointer - imported by _ctypes, ctypes
+missing module named _ctypes._SimpleCData - imported by _ctypes, ctypes
+missing module named _ctypes.get_errno - imported by _ctypes, ctypes
+missing module named _ctypes.set_errno - imported by _ctypes, ctypes
+missing module named _ctypes.alignment - imported by _ctypes, ctypes
+missing module named _ctypes.addressof - imported by _ctypes, ctypes
+missing module named _ctypes.resize - imported by _ctypes, ctypes
+missing module named _ctypes.byref - imported by _ctypes, ctypes
+missing module named _ctypes.sizeof - imported by _ctypes, ctypes
+missing module named _ctypes.dlopen - imported by _ctypes, ctypes
+missing module named _ctypes.FUNCFLAG_STDCALL - imported by _ctypes, ctypes
+missing module named _ctypes.LoadLibrary - imported by _ctypes, ctypes
+missing module named _ctypes.FUNCFLAG_USE_ERRNO - imported by _ctypes, ctypes
+missing module named _ctypes.FUNCFLAG_USE_LASTERROR - imported by _ctypes, ctypes
+missing module named _ctypes.FUNCFLAG_PYTHONAPI - imported by _ctypes, ctypes
+missing module named _ctypes.FUNCFLAG_CDECL - imported by _ctypes, ctypes
+missing module named _ctypes.FormatError - imported by _ctypes, ctypes
+missing module named struct.calcsize - imported by struct, ctypes
+missing module named _struct.__doc__ - imported by _struct, struct
+missing module named _struct._clearcache - imported by _struct, struct
+missing module named _ctypes.ArgumentError - imported by _ctypes, ctypes
+missing module named _ctypes.RTLD_LOCAL - imported by _ctypes, ctypes
+missing module named _ctypes.RTLD_GLOBAL - imported by _ctypes, ctypes
+missing module named _ctypes.__version__ - imported by _ctypes, ctypes
+missing module named _ctypes.CFuncPtr - imported by _ctypes, ctypes
+missing module named _ctypes._Pointer - imported by _ctypes, ctypes
+missing module named _ctypes.Structure - imported by _ctypes, ctypes
+missing module named _ctypes.Array - imported by _ctypes, ctypes
+missing module named _ctypes.Union - imported by _ctypes, ctypes
 missing module named _warnings.warn_explicit - imported by _warnings, warnings
 missing module named _warnings.filters - imported by _warnings, warnings
 missing module named _warnings.once_registry - imported by _warnings, warnings
 missing module named _warnings.default_action - imported by _warnings, warnings
 missing module named _warnings.warn - imported by _warnings, warnings
+missing module named _sre.MAXREPEAT - imported by _sre, sre_constants
 missing module named strop.whitespace - imported by strop, string
 missing module named strop.maketrans - imported by strop, string
 missing module named strop.lowercase - imported by strop, string
@@ -45,11 +75,19 @@ missing module named copy.deepcopy - imported by copy, weakref, sets
 missing module named array.array - imported by array, httplib
 missing module named re._compile - imported by re, sre
 missing module named re.__all__ - imported by re, sre
+missing module named unicodedata.ucd_3_2_0 - imported by unicodedata, stringprep, encodings.idna
+missing module named codecs.mbcs_encode - imported by codecs, encodings.mbcs
+missing module named codecs.mbcs_decode - imported by codecs, encodings.mbcs
+missing module named binascii.a2b_uu - imported by binascii, encodings.uu_codec
+missing module named binascii.b2a_uu - imported by binascii, encodings.uu_codec
+missing module named binascii.b2a_base64 - imported by binascii, email.base64mime
+missing module named binascii.a2b_base64 - imported by binascii, email.base64mime
+missing module named binascii.b2a_qp - imported by binascii, quopri
+missing module named binascii.a2b_qp - imported by binascii, quopri
+missing module named binascii.hexlify - imported by binascii, random
 missing module named errno.EINVAL - imported by errno, StringIO
 missing module named errno.ENOENT - imported by errno, gettext
 missing module named cStringIO.StringIO - imported by cStringIO, gettext, pprint, shlex, tempfile, pickle, PyQt4.uic.port_v2.string_io, socket, quopri, httplib, email.parser, email.message, email.generator, email.iterators, urllib, xml.sax, encodings.uu_codec, encodings.quopri_codec
-missing module named _struct.__doc__ - imported by _struct, struct
-missing module named _struct._clearcache - imported by _struct, struct
 missing module named 'PyQt4.uic.port_v3'.load_plugin - imported by 'PyQt4.uic.port_v3', PyQt4.uic.objcreator
 missing module named 'PyQt4.uic.port_v3'.ascii_upper - imported by 'PyQt4.uic.port_v3', PyQt4.uic.properties
 missing module named 'PyQt4.uic.port_v3'.as_string - imported by 'PyQt4.uic.port_v3', PyQt4.uic.icon_cache, PyQt4.uic.Compiler.qtproxies
