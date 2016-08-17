@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['fastnote.py'],
-             pathex=['/home/alexander/Development/python/fastnote'],
+             pathex=['fastnote'],
              binaries=None,
              datas=[('ui/MainWindow.ui', 'ui')],
              hiddenimports=[],
@@ -18,16 +18,11 @@ pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          exclude_binaries=True,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
           name='fastnote',
           debug=False,
           strip=False,
           upx=True,
-          console=True )
-coll = COLLECT(exe,
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               strip=False,
-               upx=True,
-               name='fastnote')
+          console=True)
