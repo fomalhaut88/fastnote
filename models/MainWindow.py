@@ -66,6 +66,8 @@ class MainWindow(Parent_cls):
 
                 elif "geom" in data:
                     geom = self.geometry()
+                    geom.setLeft(data["geom"]["left"])
+                    geom.setTop(data["geom"]["top"])
                     geom.setWidth(data["geom"]["width"])
                     geom.setHeight(data["geom"]["height"])
                     self.setGeometry(geom)
@@ -91,7 +93,9 @@ class MainWindow(Parent_cls):
             "tabs": [],
             "geom": {
                 "width": self.geometry().width(),
-                "height": self.geometry().height()
+                "height": self.geometry().height(),
+                "left": self.geometry().left(),
+                "top": self.geometry().top()
             },
             "fullscreen": self.isFullScreen()
         }
