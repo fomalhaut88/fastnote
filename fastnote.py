@@ -21,13 +21,8 @@ def already_started():
         return False
 
     else:
-        pid = os.getpid()
-        psaux_info = sp.Popen("ps aux | grep \"fastnote\" | grep -v grep | awk '{ print $2, $4 }'", shell = True, stdout=sp.PIPE).communicate()[0].strip().split('\n')
-        psaux_info = map(lambda l: l.split(), psaux_info)
-        psaux_info = filter(lambda e: e[1] != "0.0", psaux_info)
-        started_pids = set(map(lambda e: int(e[0]), psaux_info))
-        started_pids.remove(pid)
-        return bool(started_pids)
+        psaux_info = sp.Popen("ps aux | grep \"fastnote\" | grep \"Sl+\" | grep -v grep", shell = True, stdout=sp.PIPE).communicate()[0]
+        return bool(psaux_info)
 
 
 
