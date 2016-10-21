@@ -21,7 +21,7 @@ def already_started():
         return False
 
     else:
-        psaux_info = sp.Popen("ps aux | grep \"fastnote\" | grep \"Sl+\" | grep -v grep", shell = True, stdout=sp.PIPE).communicate()[0]
+        psaux_info = sp.Popen("ps aux | grep \"fastnote\" | grep \"Sl\" | grep -v grep", shell = True, stdout=sp.PIPE).communicate()[0]
         return bool(psaux_info)
 
 

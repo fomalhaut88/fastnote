@@ -39,6 +39,11 @@ class MainWindow(Parent_cls):
             SIGNAL("saveData"),
             self.save
         )
+        self.connect(
+            self,
+            SIGNAL("moveTab(int)"),
+            self.moveTabEvent
+        )
 
         self.initTabWidget()
 
@@ -50,6 +55,12 @@ class MainWindow(Parent_cls):
     def event(self, e):
         if e.type() in (QEvent.KeyRelease, QEvent.Resize):
             self.emit(SIGNAL("saveData"))
+        if e.type() == QEvent.KeyRelease:
+            modifiers = int(e.modifiers())
+            key = e.key()
+            if modifiers and modifiers == Qt.ALT and key in (Qt.Key_Left, Qt.Key_Right):
+                direction = 1 if key == Qt.Key_Right else -1
+                self.emit(SIGNAL("moveTab(int)"), direction)
         return Parent_cls.event(self, e)
 
 
@@ -102,8 +113,7 @@ class MainWindow(Parent_cls):
 
         count = self.ui.tabWidget.count()
         for i in xrange(count - 1):
-            title = unicode(self.ui.tabWidget.tabText(i))
-            text = unicode(self.ui.tabWidget.widget(i).children()[1].toPlainText())
+            title, text = self.getTabData(i)
             data["tabs"].append({
                 'title': title,
                 'text': text
@@ -111,6 +121,17 @@ class MainWindow(Parent_cls):
 
         with open(dataPath, "wb") as f:
             json.dump(data, f)
+
+
+    def getTabData(self, index):
+        title = unicode(self.ui.tabWidget.tabText(index))
+        text = unicode(self.ui.tabWidget.widget(index).children()[1].toPlainText())
+        return title, text
+
+
+    def setTabData(self, index, title, text):
+        self.ui.tabWidget.setTabText(index, title)
+        self.ui.tabWidget.widget(index).children()[1].setPlainText(text)
 
 
     def addTabEvent(self, changedIndex = None, title = None, text = "", loaded = False):
@@ -147,6 +168,7 @@ class MainWindow(Parent_cls):
 
             if loaded:
                 self.ui.tabWidget.setCurrentIndex(0)
+                self.ui.tabWidget.widget(0).children()[1].setFocus()
 
         # saving
         if not loaded:
@@ -266,3 +288,27 @@ class MainWindow(Parent_cls):
             newNum += 1
 
         return "Untitled (%d)" % newNum if newNum != 1 else "Untitled"
+
+
+    def moveTabEvent(self, direction):
+        currentIndex = self.ui.tabWidget.currentIndex()
+
+        nextIndex = None
+
+        if direction > 0 and currentIndex < self.ui.tabWidget.count() - 2:
+            nextIndex = currentIndex + 1
+        if direction < 0 and currentIndex > 0:
+            nextIndex = currentIndex - 1
+
+        if nextIndex is not None:
+            self.swapTabs(currentIndex, nextIndex)
+            self.ui.tabWidget.setCurrentIndex(nextIndex)
+            self.ui.tabWidget.widget(nextIndex).children()[1].setFocus()
+            self.emit(SIGNAL("saveData"))
+
+
+    def swapTabs(self, index1, index2):
+        tabData1 = self.getTabData(index1)
+        tabData2 = self.getTabData(index2)
+        self.setTabData(index1, *tabData2)
+        self.setTabData(index2, *tabData1)
