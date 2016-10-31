@@ -220,7 +220,7 @@ class MainWindow(Parent_cls):
             title + '.txt'
         )
 
-        filePath = QFileDialog.getSaveFileName(self, 'Save', filePath)
+        filePath = unicode(QFileDialog.getSaveFileName(self, 'Save', filePath))
 
         if filePath:
             text = unicode(self.ui.tabWidget.widget(tabIndex).children()[1].toPlainText())
