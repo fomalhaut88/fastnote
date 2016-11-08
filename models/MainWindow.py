@@ -19,7 +19,7 @@ from PyQt4.QtGui import *
 
 
 class MainWindow(Parent_cls):
-    def __init__(self, parent = None, path = None):
+    def __init__(self, parent=None, path=None):
         assert path is not None
 
         self.path = path
@@ -53,12 +53,13 @@ class MainWindow(Parent_cls):
 
 
     def event(self, e):
-        if e.type() in (QEvent.KeyRelease, QEvent.Resize):
+        if e.type() in (QEvent.KeyPress, QEvent.KeyRelease, QEvent.Resize):
             self.emit(SIGNAL("saveData"))
-        if e.type() == QEvent.KeyRelease:
+        if e.type() in (QEvent.KeyPress, QEvent.KeyRelease):
             modifiers = int(e.modifiers())
             key = e.key()
             if modifiers and modifiers == Qt.ALT and key in (Qt.Key_Left, Qt.Key_Right):
+                print "move signal"
                 direction = 1 if key == Qt.Key_Right else -1
                 self.emit(SIGNAL("moveTab(int)"), direction)
         return Parent_cls.event(self, e)
@@ -85,10 +86,14 @@ class MainWindow(Parent_cls):
 
             for tab in data["tabs"]:
                 self.addTabEvent(
-                    title = tab['title'],
-                    text = tab['text'],
-                    loaded = True
+                    title=tab['title'],
+                    text=tab['text'],
+                    loaded=True
                 )
+
+            currentIndex = data["current_index"] if "current_index" in data else 0
+            self.ui.tabWidget.setCurrentIndex(currentIndex)
+            self.ui.tabWidget.widget(currentIndex).children()[1].setFocus()
 
         if self.ui.tabWidget.count() == 1:
             self.addTabEvent()
@@ -108,7 +113,8 @@ class MainWindow(Parent_cls):
                 "left": self.geometry().left(),
                 "top": self.geometry().top()
             },
-            "fullscreen": self.isFullScreen()
+            "fullscreen": self.isFullScreen(),
+            "current_index": self.ui.tabWidget.currentIndex()
         }
 
         count = self.ui.tabWidget.count()
@@ -134,7 +140,7 @@ class MainWindow(Parent_cls):
         self.ui.tabWidget.widget(index).children()[1].setPlainText(text)
 
 
-    def addTabEvent(self, changedIndex = None, title = None, text = "", loaded = False):
+    def addTabEvent(self, changedIndex=None, title=None, text="", loaded=False):
         # addTabIndex
         addTabIndex = self.ui.tabWidget.currentIndex()
         count = self.ui.tabWidget.count()
@@ -149,12 +155,12 @@ class MainWindow(Parent_cls):
             newTab.setLayout(layout)
 
             # newTextEdit with geometry
-            newTextEdit = QTextEdit(newTab)
+            newTextEdit = QPlainTextEdit(newTab)
             widgetGeometry = self.ui.tabWidget.geometry()
             widgetGeometry.setTop(0)
             widgetGeometry.setLeft(0)
             newTextEdit.setGeometry(widgetGeometry)
-            newTextEdit.setText(text)
+            newTextEdit.setPlainText(text)
             layout.addWidget(newTextEdit)
 
             # new title
