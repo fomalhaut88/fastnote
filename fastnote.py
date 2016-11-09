@@ -1,4 +1,4 @@
-# version 1.3
+__version__ = "1.4"
 
 import os
 import sys
@@ -29,6 +29,10 @@ def already_started():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and "--version" in sys.argv[1:]:
+        print __version__
+        sys.exit(0)
+
     if already_started():
         print "fastnote is already started"
 

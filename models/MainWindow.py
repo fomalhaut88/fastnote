@@ -53,7 +53,7 @@ class MainWindow(Parent_cls):
 
 
     def event(self, e):
-        if e.type() in (QEvent.KeyPress, QEvent.KeyRelease, QEvent.Resize):
+        if e.type() in (QEvent.KeyPress, QEvent.KeyRelease, QEvent.Resize, QEvent.UpdateRequest):
             self.emit(SIGNAL("saveData"))
         if e.type() in (QEvent.KeyPress, QEvent.KeyRelease):
             modifiers = int(e.modifiers())
