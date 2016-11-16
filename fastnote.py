@@ -1,4 +1,4 @@
-__version__ = "1.4"
+__version__ = "2.0"
 
 import os
 import sys
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         app = QApplication(sys.argv)
         app.setApplicationName('FastNote')
 
-        window = MainWindow(path = path)
+        window = MainWindow(path=path)
         window.setWindowTitle('FastNote')
         window.show()
 

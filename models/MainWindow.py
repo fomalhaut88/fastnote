@@ -1,6 +1,7 @@
 import re
 import os
 import json
+import bz2
 
 from PyQt4 import uic
 from PyQt4.QtCore import *
@@ -66,12 +67,9 @@ class MainWindow(Parent_cls):
 
 
     def initTabWidget(self):
-        dataPath = os.path.join(self.path, "data.json")
+        data = self.loadData()
 
-        if os.path.exists(dataPath):
-            with open(dataPath, "rb") as f:
-                data = json.load(f)
-
+        if data is not None:
             if "fullscreen" in data:
                 if data["fullscreen"]:
                     self.showMaximized()
@@ -100,11 +98,6 @@ class MainWindow(Parent_cls):
 
 
     def save(self):
-        if not os.path.exists(self.path):
-            os.mkdir(self.path)
-
-        dataPath = os.path.join(self.path, "data.json")
-
         data = {
             "tabs": [],
             "geom": {
@@ -125,8 +118,40 @@ class MainWindow(Parent_cls):
                 'text': text
             })
 
+        self.saveData(data)
+
+
+    def saveData(self, data):
+        if not os.path.exists(self.path):
+            os.mkdir(self.path)
+
+        dataPath = os.path.join(self.path, "data")
+        dataPathJson = os.path.join(self.path, "data.json")
+
         with open(dataPath, "wb") as f:
-            json.dump(data, f)
+            dataCompressed = bz2.compress(json.dumps(data))
+            f.write(dataCompressed)
+
+        if os.path.exists(dataPathJson):
+            os.remove(dataPathJson)
+
+
+    def loadData(self):
+        dataPath = os.path.join(self.path, "data")
+        dataPathJson = os.path.join(self.path, "data.json")
+
+        data = None
+
+        if os.path.exists(dataPath):
+            with open(dataPath, "rb") as f:
+                dataCompressed = f.read()
+                data = json.loads(bz2.decompress(dataCompressed))
+
+        elif os.path.exists(dataPathJson):
+            with open(dataPathJson, "rb") as f:
+                data = json.load(f)
+
+        return data
 
 
     def getTabData(self, index):

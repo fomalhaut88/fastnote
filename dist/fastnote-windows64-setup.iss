@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Fastnote"
-#define MyAppVersion "1.4"
+#define MyAppVersion "2.0"
 #define MyAppPublisher "Alex Khlebushchev, Inc."
 #define MyAppURL "http://fomalhaut.su/"
 #define MyAppExeName "fastnote-windows64.exe"
