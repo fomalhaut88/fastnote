@@ -26,11 +26,11 @@ You will be suggested to download a binary file for Ubuntu and a setup file-exe 
 
 ### 2.1 Windows
 
-Just run setup-exe and follow the installation wizard.
+Run setup-exe and follow the installation wizard.
 
 ### 2.2 Ubuntu
 
-Just download and save the binary file where you are convenient to run Fastnote. For example, to `/usr/bin/fastnote`.
+Download and save the binary file where you are convenient to run Fastnote. For example, to `/usr/bin/fastnote`.
 
 
 ## 3. Capabilities
