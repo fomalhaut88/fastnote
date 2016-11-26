@@ -1,4 +1,4 @@
-__version__ = "2.1"
+__version__ = "2.2"
 
 import os
 import sys
@@ -47,10 +47,9 @@ if __name__ == "__main__":
 
     else:
         app = QApplication(sys.argv)
-        app.setApplicationName('FastNote')
+        app.setApplicationName('Fastnote')
 
         window = MainWindow(path=path)
-        window.setWindowTitle('FastNote')
         window.show()
 
         QObject.connect(app, SIGNAL('lastWindowClosed()'), app, SLOT('quit()'))

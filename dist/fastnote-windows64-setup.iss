@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Fastnote"
-#define MyAppVersion "2.1"
+#define MyAppVersion "2.2"
 #define MyAppPublisher "Alex Khlebushchev, Inc."
 #define MyAppURL "http://fomalhaut.su/"
 #define MyAppExeName "fastnote-windows64.exe"
@@ -23,6 +23,7 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputDir=.
 OutputBaseFilename=fastnote-windows64-setup
+SetupIconFile=..\fastnote.ico
 Compression=lzma
 SolidCompression=yes
 

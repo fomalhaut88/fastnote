@@ -6,7 +6,7 @@ block_cipher = None
 a = Analysis(['fastnote.py'],
              pathex=[],
              binaries=None,
-             datas=[('ui/MainWindow.ui', 'ui')],
+             datas=[('ui/MainWindow.ui', 'ui'), ('fastnote.ico', '.')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -25,4 +25,4 @@ exe = EXE(pyz,
           debug=False,
           strip=False,
           upx=True,
-          console=False)
+          console=False , icon='fastnote.ico')

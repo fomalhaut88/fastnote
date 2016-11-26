@@ -9,14 +9,13 @@ from PyQt4.QtGui import *
 
 
 
-(UI_cls, Parent_cls) = uic.loadUiType(
-    os.path.abspath(os.path.join(
-        os.path.dirname(__file__),
-        '..',
-        'ui/MainWindow.ui'
-    ))
-)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+UI_PATH = os.path.join(BASE_DIR, 'ui/MainWindow.ui')
+ICON_PATH = os.path.join(BASE_DIR, 'fastnote.ico')
 
+
+
+(UI_cls, Parent_cls) = uic.loadUiType(UI_PATH)
 
 
 class MainWindow(Parent_cls):
@@ -29,6 +28,9 @@ class MainWindow(Parent_cls):
 
         self.ui = UI_cls()
         self.ui.setupUi(self)
+
+        self.setWindowTitle('Fastnote')
+        self.setWindowIcon(QIcon(ICON_PATH))
 
         self.connect(
             self.ui.tabWidget,
