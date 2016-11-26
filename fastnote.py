@@ -1,8 +1,12 @@
-__version__ = "2.0"
+__version__ = "2.1"
 
 import os
 import sys
+import re
 import subprocess as sp
+
+if sys.platform == "win32":
+    import wmi
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -20,7 +24,12 @@ path = os.path.join(
 
 def already_started():
     if sys.platform == "win32":
-        return False
+        c = wmi.WMI()
+        pids = [
+            (p.ProcessId, p.Name) for p in c.Win32_process()
+            if re.match(r'fastnote.*?\.exe', p.Name)
+        ]
+        return len(pids) > 2
 
     else:
         psaux_info = sp.Popen("ps aux | grep \"fastnote\" | grep \"Sl\" | grep -v grep", shell = True, stdout=sp.PIPE).communicate()[0]
