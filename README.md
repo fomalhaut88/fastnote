@@ -16,7 +16,7 @@ It saves data automatically always after any change.
 
 Fastnote is built for Windows (64 bits) and Ubuntu (64 bits).
 
-![alt text](http://fomalhaut.su/static/fomalhaut/images/fastnote.png "Fastnote")
+![alt text](http://static.fomalhaut.su/images/fastnote.png "Fastnote")
 
 
 ## 2. Downloading and installation
