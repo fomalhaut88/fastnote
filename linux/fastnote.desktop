@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Fastnote
+Comment=A notepad to make fast notes
+Exec=/usr/bin/fastnote
+Icon=/usr/share/pixmaps/fastnote.ico
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Application;
+Path=
