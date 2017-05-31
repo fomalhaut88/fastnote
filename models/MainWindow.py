@@ -23,6 +23,7 @@ class MainWindow(Parent_cls):
         assert path is not None
 
         self.path = path
+        self.lastDataJson = None
 
         Parent_cls.__init__(self, parent)
 
@@ -130,12 +131,17 @@ class MainWindow(Parent_cls):
         dataPath = os.path.join(self.path, "data")
         dataPathJson = os.path.join(self.path, "data.json")
 
-        with open(dataPath, "wb") as f:
-            dataCompressed = bz2.compress(json.dumps(data))
-            f.write(dataCompressed)
+        dataJson = json.dumps(data)
 
-        if os.path.exists(dataPathJson):
-            os.remove(dataPathJson)
+        if dataJson != self.lastDataJson:
+            self.lastDataJson = dataJson
+            dataCompressed = bz2.compress(dataJson)
+
+            with open(dataPath, "wb") as f:
+                f.write(dataCompressed)
+
+            if os.path.exists(dataPathJson):
+                os.remove(dataPathJson)
 
 
     def loadData(self):
