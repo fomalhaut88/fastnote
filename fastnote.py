@@ -1,58 +1,41 @@
-__version__ = "2.3"
-
 import os
 import sys
-import re
-import subprocess as sp
+import logging
+from argparse import ArgumentParser
 
-#if sys.platform == "win32":
-#    import wmi
+from PyQt5.QtWidgets import QApplication
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-
-from models.MainWindow import MainWindow
+from models.main_window import MainWindow
 
 
-
-path = os.path.join(
+settings_path = os.path.join(
     os.path.expanduser("~"),
     ".fastnote"
 )
 
 
-
-def already_started():
-    if sys.platform == "win32":
-        #c = wmi.WMI()
-        #pids = [
-        #    (p.ProcessId, p.Name) for p in c.Win32_process()
-        #    if re.match(r'fastnote.*?\.exe', p.Name)
-        #]
-        #return len(pids) > 2
-        return False
-
-    else:
-        psaux_info = sp.Popen("ps aux | grep \"fastnote\" | grep \"Sl\" | grep -v grep", shell = True, stdout=sp.PIPE).communicate()[0]
-        return bool(psaux_info)
-
-
-
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and "--version" in sys.argv[1:]:
-        print __version__
-        sys.exit(0)
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-d", "--debug", action='store_true', default=False
+    )
+    args = parser.parse_args()
 
-    if already_started():
-        print "fastnote is already started"
+    app = QApplication(sys.argv)
+    app.setApplicationName('Fastnote')
+
+    if args.debug:
+        window = MainWindow(settings_path)
+        window.show()
+        sys.exit(app.exec_())
 
     else:
-        app = QApplication(sys.argv)
-        app.setApplicationName('Fastnote')
-
-        window = MainWindow(path=path)
-        window.show()
-
-        QObject.connect(app, SIGNAL('lastWindowClosed()'), app, SLOT('quit()'))
-
-        sys.exit(app.exec_())
+        try:
+            window = MainWindow(settings_path)
+            window.show()
+            code = sys.exit(app.exec_())
+        except Exception as exc:
+            logging.critical(exc)
+            sys.exit(1)
+        else:
+            sys.exit(code)

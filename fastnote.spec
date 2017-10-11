@@ -2,11 +2,15 @@
 
 block_cipher = None
 
+datas=[
+    ('ui/MainWindow.ui', 'ui'),
+    ('fastnote.ico', '.')
+]
 
 a = Analysis(['fastnote.py'],
              pathex=[],
              binaries=None,
-             datas=[('ui/MainWindow.ui', 'ui'), ('fastnote.ico', '.')],
+             datas=datas,
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
